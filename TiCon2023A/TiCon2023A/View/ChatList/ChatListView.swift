@@ -28,3 +28,9 @@ struct ChatListView: View {
         
     }
 }
+
+#Preview {
+    ChatListView(store: Store(initialState: ChatListFeature.State.init()) {
+        ChatListFeature()
+    })
+}

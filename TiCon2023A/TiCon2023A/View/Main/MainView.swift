@@ -44,11 +44,9 @@ struct MainView: View {
         .toolbar(.hidden, for: .navigationBar)
     }
     
-    struct MainView_Previews: PreviewProvider {
-        static var previews: some View {
-            MainView(store: Store(initialState: MainFeature.State.initialState) {
-                MainFeature()
-            })
-        }
-    }
+}
+#Preview {
+    MainView(store: Store(initialState: MainFeature.State.initialState) {
+        MainFeature()
+    })
 }
