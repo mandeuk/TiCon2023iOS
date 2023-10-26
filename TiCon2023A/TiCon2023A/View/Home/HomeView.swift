@@ -22,23 +22,30 @@ struct HomeView: View {
             VStack {
                 HStack {
                     Spacer()
+                    
                     Button(action: {
-                        
-                    }, label: {
-                        Text("메뉴")
+                    },
+                           label: {
+                        Text("메뉴").foregroundColor(.black)
                     })
+                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                 }
-                Text("HomeView")
+                .frame(height: 50)
+                .background(Color(UIColor(red: (233/255), green: (255/255), blue: (220/255), alpha: 1)))
                 
                 Spacer()
                 
-                AsyncImage(url: URL(string: "")) { image in
-                    image.resizable()
-                } placeholder: {
-                    //ProgressView()
-                    EmptyView().clipShape(Circle()).background(Color.blue)
-                }
-                .frame(width: 200, height: 200)
+                AsyncImage(url: URL(string: ""))
+                    .frame(width: 200, height: 200)
+                    .foregroundColor(Color.clear)
+                    .background(Color(UIColor(red: (227/255), green: (245/255), blue: (255/255), alpha: 1)))
+                    .clipShape(Circle())
+                
+                Spacer()
+                
+                Text ("이름 / 성별 / 생년월일")
+                
+                Spacer()
                 
                 Button(action: {
                     //viewStore.send(.pushNextView)
