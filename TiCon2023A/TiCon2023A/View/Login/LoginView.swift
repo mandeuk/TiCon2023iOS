@@ -34,6 +34,10 @@ struct LoginView: View {
                     debugPrint("MainView GoToMain")
                     viewStore.send(.pushMainView)
                 }
+                Button("GoToRegister"){
+                    debugPrint("MainView GoToRegister")
+                    viewStore.send(.pushRegisterView)
+                }
                 // 구글 로그인 버튼
                 GoogleSignInButton(action: {
                     guard let presentingViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController else {return}

@@ -10,16 +10,21 @@ import ComposableArchitecture
 struct ScreenFeature: Reducer {
     enum State: Equatable {
         case login(LoginFeature.State)
+        case register(RegisterFeature.State)
         case main(MainFeature.State)
     }
     enum Action {
         case login(LoginFeature.Action)
+        case register(RegisterFeature.Action)
         case main(MainFeature.Action)
     }
     
     var body: some ReducerOf<Self> {
         Scope(state: /State.login, action: /Action.login) {
             LoginFeature()
+        }
+        Scope(state: /State.register, action: /Action.register) {
+            RegisterFeature()
         }
         Scope(state: /State.main, action: /Action.main) {
             MainFeature()

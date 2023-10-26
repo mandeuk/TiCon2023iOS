@@ -29,6 +29,14 @@ struct RootView: View {
                          action: ScreenFeature.Action.main,
                          then: MainView.init
                     )
+                    
+                case .register:
+                    CaseLet(
+                        /ScreenFeature.State.register,
+                         action: ScreenFeature.Action.register,
+                         then: RegisterView.init
+                    )
+                    
                 }
             }
         }

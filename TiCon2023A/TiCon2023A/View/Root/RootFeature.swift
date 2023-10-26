@@ -30,12 +30,23 @@ struct RootFeature: Reducer {
         
         Reduce<State, Action> { state, action in
             switch action {
+                // MAIN
             case .routeAction(_, .main(.popToLoginView))://Action을 감지하는 부분으로 추측됨
                 state.routes.popTo(.login(.init()))
                 break
                 
+                
+                // LOGIN
             case .routeAction(_, .login(.pushMainView)):
                 state.routes.push(.main(.initialState))
+                break
+                
+            case .routeAction(_, .login(.pushRegisterView)):
+                state.routes.push(.register(.init()))
+                break
+                
+            case .routeAction(_, .register(.pop)):
+                state.routes.pop(1)
                 break
                 
 //            case .routeAction(_, .intro(.pushLoginView)):

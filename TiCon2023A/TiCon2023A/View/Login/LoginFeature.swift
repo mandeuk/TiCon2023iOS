@@ -42,8 +42,6 @@ struct LoginFeature: Reducer {
         // Navigation actions
         case pushMainView
         case pushRegisterView
-        case presentUnauthSheet
-        case pushFindPasswordView
     }
     
     var body: some ReducerOf<Self>{
@@ -170,9 +168,6 @@ struct LoginFeature: Reducer {
                 debugPrint("Reducer .signInFailure")
                 break
                 
-            case .presentUnauthSheet:
-                state.isShowUnauthSheet = true
-                break
                 
             default:
                 break
