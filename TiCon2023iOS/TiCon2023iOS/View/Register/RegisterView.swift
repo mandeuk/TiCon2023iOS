@@ -36,12 +36,6 @@ struct RegisterView: View {
                 
                 Spacer()
                 
-//                AsyncImage(url: URL(string: ""))
-//                    .frame(width: 200, height: 200)
-//                    .foregroundColor(Color.clear)
-//                    .background(Color(UIColor(red: (227/255), green: (245/255), blue: (255/255), alpha: 1)))
-//                    .clipShape(Circle())
-                
                 EditableCircularProfileImage(viewModel: viewModel, width: 200, height: 200)
                 
                 
