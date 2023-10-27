@@ -65,6 +65,7 @@ struct LoginView: View {
                             viewStore.send(.googleSignIn)
                         }
                 })
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                 
 //                // 애플 로그인 커스텀 버튼
 //                Button(action: {

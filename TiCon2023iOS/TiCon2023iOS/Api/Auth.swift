@@ -46,7 +46,7 @@ extension GetUserClient: DependencyKey {
                 "serviceKey": "zmgWZa6BOhkuU1XE7tYLRcyqpjeDfbKow"
             ]
             
-            fetchData(completion: <#T##(Result<baseResponse<Notice>, NSError>) -> Void##(Result<baseResponse<Notice>, NSError>) -> Void##(_ result: Result<baseResponse<Notice>, NSError>) -> Void#>)
+            //fetchData(completion: <#T##(Result<baseResponse<Notice>, NSError>) -> Void##(Result<baseResponse<Notice>, NSError>) -> Void##(_ result: Result<baseResponse<Notice>, NSError>) -> Void#>)
             
             async let result = AF.request("http://localhost:9000/api/auth/signIn",
                                           method: .post,
@@ -84,7 +84,7 @@ extension GetUserClient: DependencyKey {
 //                    }
 //                    
 //                })
-            
+            return ""
         }
     )
 }

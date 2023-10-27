@@ -19,6 +19,8 @@
 	<dict>
 		<key>UIImageName</key>
 		<string>Splash</string>
+		<key>UILaunchScreen</key>
+		<dict/>
 	</dict>
 </dict>
 </plist>
