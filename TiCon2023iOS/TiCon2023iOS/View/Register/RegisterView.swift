@@ -78,7 +78,7 @@ struct RegisterView: View {
 }
 
 #Preview {
-    RegisterView(store: Store(initialState: RegisterFeature.State.init()) {
+    RegisterView(store: Store(initialState: RegisterFeature.State.init(token: "test")) {
         RegisterFeature()
     })
 }

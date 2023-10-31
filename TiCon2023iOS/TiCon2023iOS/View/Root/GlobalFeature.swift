@@ -12,6 +12,7 @@ struct GlobalFeature: Reducer {
         static let initialState = State()
         
         var globalString: String = ""
+        var token: String = ""
     }
     
     enum Action {

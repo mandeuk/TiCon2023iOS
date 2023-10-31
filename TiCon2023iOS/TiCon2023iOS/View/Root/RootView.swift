@@ -37,6 +37,20 @@ struct RootView: View {
                          then: RegisterView.init
                     )
                     
+                case .chatDetail:
+                    CaseLet(
+                        /ScreenFeature.State.chatDetail,
+                         action: ScreenFeature.Action.chatDetail,
+                         then: ChatDetailView.init
+                    )
+                    
+                case .logout:
+                    CaseLet(
+                        /ScreenFeature.State.logout,
+                         action: ScreenFeature.Action.logout,
+                         then: LogoutView.init
+                    )
+                    
                 }
             }
         }

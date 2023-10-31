@@ -46,7 +46,7 @@ struct MainView: View {
     
 }
 #Preview {
-    MainView(store: Store(initialState: MainFeature.State.initialState) {
+    MainView(store: Store(initialState: MainFeature.State.init()) {
         MainFeature()
     })
 }

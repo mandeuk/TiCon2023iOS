@@ -24,6 +24,7 @@ struct HomeView: View {
                     Spacer()
                     
                     Button(action: {
+                        viewStore.send(.pushLogoutView)
                     },
                            label: {
                         Text("메뉴").foregroundColor(.black)
@@ -47,10 +48,24 @@ struct HomeView: View {
                 
                 Spacer()
                 
+                if(viewStore.state.isMatching){
+                    Text("매칭중입니다.")
+                }
+                
                 Button(action: {
-                    //viewStore.send(.pushNextView)
+                    viewStore.send(.clickMatching)
                 }, label: {
-                    Text("매칭시작")
+                    if(viewStore.state.isMatching){
+                        Text("매칭취소")
+                            .frame(width: 200, height: 50)
+                            .foregroundColor(Color.black)
+                            .background(Color.red.opacity(0.2))
+                    } else {
+                        Text("매칭시작")
+                            .frame(width: 200, height: 50)
+                            .foregroundColor(Color.black)
+                            .background(Color.red.opacity(0.2))
+                    }
                 })
                 
                 Spacer()

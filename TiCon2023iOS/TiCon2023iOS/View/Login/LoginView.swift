@@ -30,14 +30,14 @@ struct LoginView: View {
             VStack {
                 Text("LoginView")
                 
-                Button("GoToMain"){
-                    debugPrint("MainView GoToMain")
-                    viewStore.send(.pushMainView)
-                }
-                Button("GoToRegister"){
-                    debugPrint("MainView GoToRegister")
-                    viewStore.send(.pushRegisterView)
-                }
+//                Button("GoToMain"){
+//                    debugPrint("MainView GoToMain")
+//                    viewStore.send(.pushMainView)
+//                }
+//                Button("GoToRegister"){
+//                    debugPrint("MainView GoToRegister")
+//                    viewStore.send(.pushRegisterView)
+//                }
                 // 구글 로그인 버튼
                 GoogleSignInButton(action: {
                     guard let presentingViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.rootViewController else {return}
@@ -62,13 +62,13 @@ struct LoginView: View {
                             debugPrint("LoginFeature, .googleSignIn, idToken: \(result.user.idToken?.tokenString ?? "no")")
                             
                             // 서버에 로그인 요청
-                            viewStore.send(.googleSignIn)
+                            viewStore.send(.googleSignIn(token))
                         }
                 })
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                 
-//                // 애플 로그인 커스텀 버튼
-//                Button(action: {
+                //                // 애플 로그인 커스텀 버튼
+                //                Button(action: {
 //                    appleSignInController.appleSignInTapped()
 //                }, label: {
 //                    //Text("AS")

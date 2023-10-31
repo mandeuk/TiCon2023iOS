@@ -38,16 +38,38 @@ struct RootFeature: Reducer {
                 
                 // LOGIN
             case .routeAction(_, .login(.pushMainView)):
-                state.routes.push(.main(.initialState))
+                state.routes.push(.main(.init()))
                 break
                 
-            case .routeAction(_, .login(.pushRegisterView)):
-                state.routes.push(.register(.init()))
+            case .routeAction(_, .login(.pushRegisterView(let token))):
+                state.routes.push(.register(.init(token: token)))
                 break
                 
             case .routeAction(_, .register(.pop)):
                 state.routes.pop(1)
                 break
+                
+                // MAIN - CHAT DETAIL
+            case .routeAction(_, .chatDetail(.pop)):
+                state.routes.pop(1)
+                break
+                
+                // MAIN - CHAT
+            case .routeAction(_, action: .main(.chat(.openChatDetail(let number)))):
+                state.routes.push(.chatDetail(.init(chatNumber: number)))
+                break
+                
+                // MAIN - LOGOUT
+            case .routeAction(_, .logout(.pop)):
+                state.routes.popTo(.login(.init()))
+                break
+                
+                // MAIN - HOME
+            case .routeAction(_, action: .main(.home(.pushLogoutView))):
+                state.routes.push(.logout(.init()))
+                break
+                
+                
                 
 //            case .routeAction(_, .intro(.pushLoginView)):
 //                state.routes.push(.login(.init()))

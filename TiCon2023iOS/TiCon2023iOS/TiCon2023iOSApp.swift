@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 @main
 struct TiCon2023iOSApp: App {
+    
     init() {
         // 런치스크린 딜레이
         Thread.sleep(forTimeInterval: 2)

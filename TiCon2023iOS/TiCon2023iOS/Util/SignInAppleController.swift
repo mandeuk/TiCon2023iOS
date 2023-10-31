@@ -43,7 +43,7 @@ extension SignInAppleController {
             debugPrint("userIdentifier: \(userIdentifier)")
             debugPrint("userName: \(String(describing: userName))")
             debugPrint("userEmail: \(userEmail ?? "ERROR")")
-            store.send(.signInSuccess(userIdentifier))
+            store.send(.appleSignIn(userIdentifier))
         }
     }
     

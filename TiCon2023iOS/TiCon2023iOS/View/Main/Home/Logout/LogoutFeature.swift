@@ -1,31 +1,36 @@
 //
-//  ChatListFeature.swift
-//  TiCon2023A
+//  LogoutFeature.swift
+//  TiCon2023iOS
 //
-//  Created by Inho Lee on 10/26/23.
+//  Created by Inho Lee on 10/30/23.
 //
 
 import SwiftUI
 import ComposableArchitecture
 
-struct ChatListFeature: Reducer {
+struct LogoutFeature: Reducer {
     struct State: Equatable {
         var password: String = ""
     }
     
     enum Action {
+        case logout
         
         // Navigation actions
-        case pushNextView
+        case pop
     }
     
     var body: some ReducerOf<Self>{
         Reduce<State, Action> { state, action in
             switch action {
-                
-                
-            default:
+            case .logout:
+                debugPrint("Logout clicked")
+                return .send(.pop)
                 break
+            case .pop:
+                break
+            //default:
+            //    break
             }
             return .none
         }

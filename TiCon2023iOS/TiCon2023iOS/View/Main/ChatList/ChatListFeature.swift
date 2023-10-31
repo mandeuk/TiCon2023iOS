@@ -1,5 +1,5 @@
 //
-//  HomeFeature.swift
+//  ChatListFeature.swift
 //  TiCon2023A
 //
 //  Created by Inho Lee on 10/26/23.
@@ -8,13 +8,13 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct HomeFeature: Reducer {
+struct ChatListFeature: Reducer {
     struct State: Equatable {
         var password: String = ""
     }
     
     enum Action {
-        
+        case openChatDetail(Int)
         // Navigation actions
         case pushNextView
     }

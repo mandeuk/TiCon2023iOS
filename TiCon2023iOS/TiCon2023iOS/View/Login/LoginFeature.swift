@@ -14,7 +14,9 @@ import AuthenticationServices
 struct LoginFeature: Reducer {
     @AppStorage("test") private var test: String = ""
     @AppStorage("currentLoginPlatform") private var currentLoginPlatform: String = ""
-    
+    @Dependency(\.getUser) var getUser
+    @Dependency(\.signInWithGoogle) var signInWithGoogle
+
     struct State: Equatable {
         var id: String = ""
         var password: String = ""
@@ -34,14 +36,14 @@ struct LoginFeature: Reducer {
         case failCheckSignIn
         
         // SNS SignIn
-        case googleSignIn
-        case appleSignIn
-        case signInSuccess(String)
+        case googleSignIn(String)
+        case appleSignIn(String)
+        case signInSuccess
         case signInFailure
         
         // Navigation actions
         case pushMainView
-        case pushRegisterView
+        case pushRegisterView(String)
     }
     
     var body: some ReducerOf<Self>{
@@ -122,18 +124,20 @@ struct LoginFeature: Reducer {
                     break
                 case .google:
                     var success: Bool = false
+                    var idToken: String = ""
                     GIDSignIn.sharedInstance.restorePreviousSignIn{ user, error in
                         if ((user) != nil) {
                             debugPrint("Success to restore \(String(describing: user?.accessToken))")
                             success = true
+                            idToken = user?.idToken?.tokenString ?? ""
                         } else {
                             debugPrint("Failed to restore \(String(describing: error))")
                             success = false
                         }
                     }
-                    if (success) {
+                    if (success && !idToken.isEmpty) {
                         state.tryAutoLogin = false
-                        return .send(.googleSignIn)
+                        return .send(.googleSignIn(idToken))
                     }
                     break
                 case .kakao:
@@ -145,27 +149,40 @@ struct LoginFeature: Reducer {
                 return .send(.failCheckSignIn)
                 
             case .failCheckSignIn:
-//                currentLoginPlatform.
-//                UserDefaults.standard.removeObject(forKey: UDKey.currentLoginPlatform)
-//                UserDefaults.standard.removeObject(forKey: UDKey.id)
-//                UserDefaults.standard.removeObject(forKey: UDKey.pw)
-//                UserDefaults.standard.removeObject(forKey: UDKey.token)
                 break
                 
-            case .googleSignIn:
-                debugPrint("Reducer .googleSignIn end")
+            case .googleSignIn(let token):
+                return .run { send in
+                    let statusCode = try await signInWithGoogle.fetch(token)
+                    
+                    switch(statusCode){
+                    case 200:
+                        await send(.signInSuccess)
+                        //홈 화면으로
+                        break
+                    case 403:
+                        debugPrint("403")
+                        //회원가입 화면으로
+                        await send(.pushRegisterView(token))
+                        break
+                    default:
+                        await send(.signInFailure)
+                        //실패처리
+                        break
+                    }
+                }
+                
+            case .appleSignIn(let token):
+                debugPrint("Try Apple sign in: \(token)")
                 break
                 
-            case .appleSignIn:
-                
-                break
-                
-            case .signInSuccess(let token):
-                debugPrint("Reducer .signInSuccess : \(token)")
-                break
+            case .signInSuccess:
+                debugPrint("Reducer .signInSuccess")
+                return .send(.pushMainView)
                 
             case .signInFailure:
                 debugPrint("Reducer .signInFailure")
+                //실패처리 구현해야함
                 break
                 
                 
