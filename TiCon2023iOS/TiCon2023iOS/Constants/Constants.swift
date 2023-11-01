@@ -11,3 +11,4 @@ enum LoginPlatform: String {
     case google = "google"
     case kakao = "kakao"
 }
+

@@ -9,13 +9,20 @@ import SwiftUI
 import ComposableArchitecture
 
 struct HomeFeature: Reducer {
+    
+    @Dependency(\.getUser) var getUser
+    
     struct State: Equatable {
-        var password: String = ""
+        var name: String = "이름"
+        var gender: String = "성별"
+        var birth: String = "생일"
         var isMatching: Bool = false
     }
     
     enum Action {
         case clickMatching
+        case getUser
+        case setUser(baseResponse<UserInfo>)
         
         // Navigation actions
         case pushNextView
@@ -28,6 +35,22 @@ struct HomeFeature: Reducer {
                 
             case .clickMatching:
                 state.isMatching.toggle()
+                break
+                
+            case .getUser:
+                debugPrint("getUser")
+                return .run { send in
+                    let response = try await getUser.fetch()
+                    if (response.statusCode == 200) {
+                        await send(.setUser(response))
+                    }
+                }
+                
+            case .setUser(let response):
+                debugPrint("setUser")
+                state.name = response.data?.name ?? "ERR"
+                state.gender = response.data?.gender ?? "ERR"
+                state.birth = response.data?.birth ?? "ERR"
                 break
                 
             default:

@@ -17,8 +17,6 @@ struct HomeView: View {
     
     var body: some View {
         WithViewStore(store, observe: {$0}) { viewStore in
-            
-            
             VStack {
                 HStack {
                     Spacer()
@@ -44,7 +42,7 @@ struct HomeView: View {
                 
                 Spacer()
                 
-                Text ("이름 / 성별 / 생년월일")
+                Text ("\(viewStore.name) / \(viewStore.gender) / \(viewStore.birth)")
                 
                 Spacer()
                 
@@ -73,7 +71,7 @@ struct HomeView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .task{
-            //self.store.send(.checkSignIn)
+            self.store.send(.getUser)
         }
         
     }

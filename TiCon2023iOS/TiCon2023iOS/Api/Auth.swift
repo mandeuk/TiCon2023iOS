@@ -37,15 +37,13 @@ extension DependencyValues {
 
 // Get User
 struct GetUserClient {
-    var fetch: () async throws -> UserInfo
+    var fetch: () async throws -> baseResponse<UserInfo>
 }
 
 extension GetUserClient: DependencyKey {
     static let liveValue = Self(
         fetch: {
-            let param: [String:String] = [:
-                //"idToken": idToken
-            ]
+            let param: [String:String]? = nil
             
             async let result = AF.request(ApiAddress.Auth.getUser,
                                           method: .get,
@@ -64,7 +62,6 @@ extension GetUserClient: DependencyKey {
                 case 200:
                     debugPrint("200 성공 already Create ID")
                     debugPrint("\(String(describing: json?.data))")
-                    return (json?.data) ?? UserInfo(name: "err", gender: "err", birth: "err")
                     
                 case .none:
                     debugPrint("statusCode: none")
@@ -72,17 +69,18 @@ extension GetUserClient: DependencyKey {
                     
                 case .some(_):
                     debugPrint("statusCode: \(json?.statusCode ?? 0), msg: \(json?.message  ?? "err")")
+                    
                     break
                 }
-                break
+                return json ?? baseResponse(statusCode: 0, message: nil, data: nil)
                 
-            case .failure(_):
+            case .failure(let err):
                 //실패했을 때
-                debugPrint("response failure")
+                debugPrint("response failure: \(err.localizedDescription)")
                 break
             }
             
-            return UserInfo(name: "err", gender: "err", birth: "err")
+            return baseResponse(statusCode: 0, message: nil, data: nil)
         }
     )
 }

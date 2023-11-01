@@ -14,7 +14,6 @@ struct MainView: View {
     
     init(store: StoreOf<MainFeature>) {
         self.store = store
-        //await self.store.send(.getUser)
     }
     
     var body: some View {
