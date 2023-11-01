@@ -241,3 +241,61 @@ extension DependencyValues {
         set { self[RegisterUserClient.self] = newValue }
     }
 }
+
+
+
+// Logout
+struct LogoutClient {
+    var fetch: () async throws -> Bool
+}
+
+extension LogoutClient: DependencyKey {
+    static let liveValue = Self(
+        fetch: {
+            let param: [String:String]? = nil
+            
+            async let result = AF.request(ApiAddress.Auth.logout,
+                                          method: .delete,
+                                          parameters: param,
+                                          encoder: JSONParameterEncoder.default).serializingData().response
+            
+            let response = await result
+            
+            switch response.result {
+            case .success(_):
+                debugPrint("response success")
+                let json = try? JSONDecoder().decode(baseResponse<Int?>.self, from: response.data!)
+                
+                switch json?.statusCode {
+                case 200:
+                    debugPrint("200 성공")
+                    debugPrint("\(String(describing: json?.data))")
+                    return true
+                
+                case .none:
+                    debugPrint("statusCode: none")
+                    break
+                    
+                case .some(_):
+                    debugPrint("statusCode: \(json?.statusCode ?? 0), msg: \(json?.message  ?? "err")")
+                    break
+                }
+                break
+                
+            case .failure(let err):
+                //실패했을 때
+                debugPrint("response failure: \(err.localizedDescription)")
+                break
+            }
+            
+            return false//baseResponse(statusCode: 0, message: nil, data: nil)
+        }
+    )
+}
+
+extension DependencyValues {
+    var logout: LogoutClient {
+        get { self[LogoutClient.self] }
+        set { self[LogoutClient.self] = newValue }
+    }
+}

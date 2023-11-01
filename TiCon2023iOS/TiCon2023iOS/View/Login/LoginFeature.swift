@@ -12,7 +12,7 @@ import GoogleSignIn
 import AuthenticationServices
 
 struct LoginFeature: Reducer {
-    @AppStorage("test") private var test: String = ""
+    @AppStorage("didLogout") private var didLogout: Bool = false
     @AppStorage("currentLoginPlatform") private var currentLoginPlatform: String = ""
     @Dependency(\.getUser) var getUser
     @Dependency(\.signInWithGoogle) var signInWithGoogle
@@ -26,14 +26,10 @@ struct LoginFeature: Reducer {
     }
     
     enum Action {
-        case idChange(String)
-        case pwChange(String)
-        
-        case trySignIn
-        case tryAutoSignIn
-        
         case checkSignIn
         case failCheckSignIn
+        
+        case getUser
         
         // SNS SignIn
         case googleSignIn(String)
@@ -49,66 +45,6 @@ struct LoginFeature: Reducer {
     var body: some ReducerOf<Self>{
         Reduce<State, Action> { state, action in
             switch action {
-            case let .idChange(text):
-                state.id = text
-                self.test = text
-                break
-                
-            case let .pwChange(text):
-                state.password = text
-                break
-                
-            case .trySignIn:
-                return .run { [state] send in
-                    let param: [String: String] = [
-                        "account": state.id,
-                        "password": state.password,
-                    ]
-                    //debugPrint("param => \(param)")
-                    
-                    async let result = AF.request("http://localhost:9000/api/auth/signIn",
-                                                  method: .post,
-                                                  parameters: param,
-                                                  encoder: JSONParameterEncoder.default).serializingData().response
-                    
-                    let response = await result
-                    
-                    switch response.result {
-                    case .success(_):
-                        debugPrint("성공")
-                        let json = try? JSONDecoder().decode(baseResponse<Int>.self, from: response.data!)
-                        
-                        debugPrint(String(json?.statusCode ?? 0))
-                        switch json?.statusCode {
-                        case 200:
-                            debugPrint("200 성공 already Create ID")
-                            debugPrint("\(String(describing: json?.data))")
-                            break
-                        case 401:
-                            debugPrint("401 인증실패")
-                            break
-                        case 403:
-                            debugPrint("403 No member data you have to Create ID")
-                            break
-                        case 500:
-                            debugPrint("500 서버오류")
-                            break
-                        case .none:
-                            debugPrint("statusCode : none - 개발자에게 문의해 주세요.")
-                            break
-                        case .some(_):
-                            debugPrint("전화번호 및 국가코드를 다시 확인해 주세요.")
-                            break
-                        }
-                        
-                    case .failure(_):
-                        //실패했을 때
-                        
-                        break
-                    }
-                    return
-                }
-                
             case .checkSignIn:
                 state.tryAutoLogin = true
                 
@@ -119,7 +55,7 @@ struct LoginFeature: Reducer {
                 case .email:
                     // 자동 로그인은 세션 쿠키로
                     state.tryAutoLogin = false
-                    return .send(.trySignIn)
+                    return .send(.getUser)
                 case .apple:
                     break
                 case .google:
@@ -152,6 +88,7 @@ struct LoginFeature: Reducer {
                 break
                 
             case .googleSignIn(let token):
+                didLogout = false
                 return .run { send in
                     let statusCode = try await signInWithGoogle.fetch(token)
                     
@@ -173,6 +110,7 @@ struct LoginFeature: Reducer {
                 }
                 
             case .appleSignIn(let token):
+                didLogout = false
                 debugPrint("Try Apple sign in: \(token)")
                 break
                 
@@ -185,6 +123,18 @@ struct LoginFeature: Reducer {
                 //실패처리 구현해야함
                 break
                 
+            case .getUser:
+                if (didLogout == false){
+                    return .run { send in
+                        let response = try await getUser.fetch()
+                        if (response.statusCode == 200) {
+                            await send(.pushMainView)
+                        }
+                    }
+                } else {
+                    debugPrint("didLogout: \(didLogout)")
+                }
+                break
                 
             default:
                 break

@@ -83,7 +83,7 @@ struct LoginView: View {
             GIDSignIn.sharedInstance.handle(url)
         }
         .task{
-            //self.store.send(.checkSignIn)
+            self.store.send(.getUser)
         }
         
         

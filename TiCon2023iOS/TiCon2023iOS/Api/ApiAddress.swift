@@ -12,6 +12,7 @@ enum ApiAddress {
         private static let baseUrl = serverAddress + "/auth"
         
         public static let login = baseUrl + "/"
+        public static let logout = baseUrl + "/logout"
         public static let getUser = baseUrl + "/getUser"
         public static let registerUser = baseUrl + "/registerUser"
         public static let signInWithGoogle = baseUrl + "/signInWithGoogle"
