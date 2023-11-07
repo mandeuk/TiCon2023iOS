@@ -6,7 +6,7 @@
 //
 
 enum ApiAddress {
-    private static let serverAddress = "http://localhost:9001/api"
+    private static let serverAddress = "http://192.168.0.96:9001/api"
     
     enum Auth {
         private static let baseUrl = serverAddress + "/auth"
